@@ -1,0 +1,26 @@
+sheet1=read.csv("jcw.csv")
+data <- subset(sheet1,  year == "2007")
+data1 <- subset(sheet1, year == "2008")
+data2 <- subset(sheet1, year == "2009")
+data3 <- subset(sheet1, year == "2010")
+data4 <- subset(sheet1, year == "2011")
+data5 <- subset(sheet1, year == "2012")
+data6 <- subset(sheet1, year == "2013")
+data7 <- subset(sheet1, year == "2014")
+data8 <- subset(sheet1, year == "2017")
+
+population<-c(median(data$poptotl),median(data1$poptotl),
+       median(data2$poptotl),median(data3$poptotl),median(data4$poptotl),
+       median(data5$poptotl),
+       median(data6$poptotl),median(data7$poptotl),median(data8$poptotl))
+
+labourfemale<-c(median(data$tlftotl),median(data1$tlftotl),
+            median(data2$tlftotl),
+            median(data3$tlftotl),median(data4$tlftotl),
+            median(data5$tlftotl),
+            median(data6$tlftotl),median(data7$tlftotl),median(data8$tlftotl))
+
+plot(population,labourfemale)
+
+
+

@@ -1,0 +1,26 @@
+sheet1=read.csv("jcw.csv")
+data <- subset(sheet1,  year == "2007")
+data1 <- subset(sheet1, year == "2008")
+data2 <- subset(sheet1, year == "2009")
+data3 <- subset(sheet1, year == "2010")
+data4 <- subset(sheet1, year == "2011")
+data5 <- subset(sheet1, year == "2012")
+data6 <- subset(sheet1, year == "2013")
+data7 <- subset(sheet1, year == "2014")
+data8 <- subset(sheet1, year == "2017")
+
+gdp<-c(median(data$rgpd),median(data1$rgpd),
+       median(data2$rgpd),median(data3$rgpd),median(data4$rgpd),
+       median(data5$rgpd),
+       median(data6$rgpd),median(data7$rgpd),median(data8$rgpd))
+
+empratio<-c(median(data$empworkfe),median(data1$empworkfe),
+            median(data2$empworkfe),
+            median(data3$empworkfe),median(data4$empworkfe),
+            median(data5$empworkfe),
+            median(data6$empworkfe),median(data7$empworkfe),median(data8$empworkfe))
+
+plot(empratio,gdp)
+
+
+

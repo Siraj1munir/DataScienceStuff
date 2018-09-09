@@ -1,0 +1,10 @@
+DATA   work.demo;
+retain  value Range_Normal   1 = '90' value Range_HyperTension 2 = '140';
+set    work.demo;
+proc sgpanel data= work.demo noautolegend;
+  title "Blood Pressure";
+  panelby stolic;
+  histogram Diastolic;
+  density stolic;
+run;
+title;

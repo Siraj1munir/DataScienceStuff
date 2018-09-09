@@ -1,0 +1,26 @@
+sheet1=read.csv("jcw.csv")
+data <- subset(sheet1,  year == "2007")
+data1 <- subset(sheet1, year == "2008")
+data2 <- subset(sheet1, year == "2009")
+data3 <- subset(sheet1, year == "2010")
+data4 <- subset(sheet1, year == "2011")
+data5 <- subset(sheet1, year == "2012")
+data6 <- subset(sheet1, year == "2013")
+data7 <- subset(sheet1, year == "2014")
+data8 <- subset(sheet1, year == "2017")
+
+gdp<-c(mean(data$rgpd),mean(data1$rgpd),
+       mean(data2$rgpd),mean(data3$rgpd),mean(data4$rgpd),
+       mean(data5$rgpd),
+       mean(data6$rgpd),mean(data7$rgpd),mean(data8$rgpd))
+
+empratio<-c(mean(data$empworkfe),mean(data1$empworkfe),
+            mean(data2$empworkfe),
+            mean(data3$empworkfe),mean(data4$empworkfe),
+            mean(data5$empworkfe),
+            mean(data6$empworkfe),mean(data7$empworkfe),mean(data8$empworkfe))
+
+plot(empratio,gdp)
+
+
+
