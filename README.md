@@ -4,8 +4,8 @@ My recent work on Data Science and deep learning.
 <li>Wit AI development</li>
 <li>Some Deep Leaning stuff</li>
 <li>Machine Learning stuff</li>
-<li>R development</li>
+<li>Data Mining with Rapid Miner</li>
 <li>Hands-on with python and Api's</li>
-<li>Some statistical analysis and data mining :-)</li>
+<li>Some statistical analysis with R and SAS:-)</li>
  
 </ul>
