@@ -6,5 +6,6 @@ My recent work on Data Science and deep learning.
 <li>Machine Learning stuff</li>
 <li>R development</li>
 <li>Hands-on with python and Api's</li>
+<li>Some statistical analysis and data mining :-)</li>
  
 </ul>
