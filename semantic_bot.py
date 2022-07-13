@@ -12,7 +12,7 @@ while play:
         OLC = input("Enter Your Desired OLC:")
         if re.match(r'^[A-Za-z{+}0-9]{7}$', OLC):
             def get_data(OLC):
-                graph = Graph("bolt://localhost:7687", auth=("neo4j", "123"))
+                graph = Graph("bolt://localhost:7687", auth=("username", "password"))
                 query = """
                 MATCH (OLC:OLC {{Code: '{code}'}}),p=(OLC)-[r:OLC_HAS_CID]->() RETURN p """.format(code = OLC)
                 data = graph.run(query).data()
@@ -25,7 +25,7 @@ while play:
         CID = input("Enter Your Desired CID:")
         if re.match(r'^[A-Za-z0-9]{46}$', CID):
             def get_data(CID):
-                graph = Graph("bolt://localhost:7687", auth=("neo4j", "123"))
+                graph = Graph("bolt://localhost:7687", auth=("username", "password"))
                 query = """
                     MATCH (n:C_ID {{value: '{value}'}}) RETURN n 
                     """.format(value = CID)
@@ -38,7 +38,7 @@ while play:
     elif response =="3":
         Person= input("Enter Your Desired Person:")
         def get_data(Person):
-            graph = Graph("bolt://localhost:7687", auth=("neo4j", "123"))
+            graph = Graph("bolt://localhost:7687", auth=("username", "password"))
             query = """
             MATCH (n:Person {{Name: '{name}'}}), p=(n)-[r:LOCATED_AT]->() RETURN p 
             """.format(name = Person)
@@ -49,7 +49,7 @@ while play:
     elif response =="4":
         Location= input("Enter Your Desired Location:")
         def get_data(Location):
-            graph = Graph("bolt://localhost:7687", auth=("neo4j", "123"))
+            graph = Graph("bolt://localhost:7687", auth=("username", "password"))
             query = """
             MATCH (n:Location {{Name: '{name}'}}), p=(n)-[r:HAS_OLC]->() RETURN p 
             """.format(name = Location)
@@ -60,7 +60,7 @@ while play:
     elif response =="5":
         tag= input("Enter Your RFID Tag No:")
         def get_data(tag):
-            graph = Graph("bolt://localhost:7687", auth=("neo4j", "123"))
+            graph = Graph("bolt://localhost:7687", auth=("username", "password"))
             query = """
             MATCH (n:RFID {{Tag: '{tag}'}}), p=(n)-[r:HAS_C_ID]->() RETURN p 
             """.format(tag = tag)
