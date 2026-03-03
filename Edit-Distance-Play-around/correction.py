@@ -3,6 +3,8 @@ from operator import itemgetter
 import re
 import os
 
+_dictionary_cache = None
+
 from security_utils import safe_corrected_path
 
 def tokenizer(sentence):
@@ -190,6 +192,17 @@ def getDictionary():
 
 	return words
 
+
+def get_or_load_dictionary():
+	"""
+	Lazy-load and cache the dictionary so that repeated spell checking
+	does not repeatedly read /usr/share/dict/words.
+	"""
+	global _dictionary_cache
+	if _dictionary_cache is None:
+		_dictionary_cache = getDictionary()
+	return _dictionary_cache
+
 def findPlausibleWords(word, valid_words):
 	"""
 	findPlausibleWords() takes a word and a list of valid words and checks
@@ -325,6 +338,45 @@ def _prompt_correction(word, plausible, line, line_number):
 	print()
 
 	return new
+
+
+def spellcheck_text(text):
+	"""
+	Non-interactive spell checking helper used by API integrations.
+	Takes a single line of text and returns corrected text along with
+	correction details.
+	"""
+	words = get_or_load_dictionary()
+	line = tokenizer(text)
+	corrections = []
+	new_words = []
+
+	for word in line.split():
+		new = word
+		if len(word) <= len(words) - 2:
+			if ((word not in words[len(word)]) and
+			   (word.lower() not in words[len(word)])):
+				plausible = findPlausibleWords(word, words)
+				if plausible:
+					best = plausible[0]
+					new = best[0]
+					corrections.append({
+						"original": word,
+						"corrected": new,
+						"distance": best[1],
+						"alternatives": [w for (w, _d) in plausible],
+					})
+
+		new_words.append(new)
+
+	corrected = " ".join(new_words)
+	return {
+		"original": text,
+		"tokenized": line,
+		"corrected": corrected,
+		"num_corrections": len(corrections),
+		"corrections": corrections,
+	}
 
 
 def spellChecker(f):
