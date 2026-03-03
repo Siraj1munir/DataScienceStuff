@@ -3,6 +3,8 @@ from operator import itemgetter
 import re
 import os
 
+from security_utils import safe_corrected_path
+
 def tokenizer(sentence):
 	"""
 	tokenizer() takes a sentence (string) and tokenizes it according to the
@@ -383,8 +385,8 @@ def spellChecker(f):
 
 	# Create a new file and write the corrected version of the text to that
 	# file.
-	safe_in_name = os.path.basename(f.name)
-	fixed_file = open('corrected_' + safe_in_name, 'w')
+	fixed_path = safe_corrected_path(f.name)
+	fixed_file = open(fixed_path, 'w')
 	fixed_file.write(f_new)
 	fixed_file.close()
 
