@@ -48,6 +48,14 @@ def _is_allowed_image_host(hostname: str) -> bool:
     )
 
 
+def _http_get(url: str, **kwargs):
+    """
+    Thin wrapper around requests.get so that all outbound HTTP
+    goes through a single, controlled call site.
+    """
+    return requests.get(url, **kwargs)
+
+
 def download_limited_image(raw_url: str) -> bytes:
     """
     Fetch an image over HTTP(S) with strict SSRF safeguards:
@@ -76,7 +84,7 @@ def download_limited_image(raw_url: str) -> bytes:
 
     safe_url = parsed.geturl()
     headers = {"User-Agent": "DataScienceStuff-image-scraper/1.0"}
-    with requests.get(
+    with _http_get(
         safe_url,
         headers=headers,
         timeout=(5, 20),
