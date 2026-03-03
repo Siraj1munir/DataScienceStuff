@@ -10,3 +10,12 @@ My recent work on Data Science and deep learning.
 <li>Software Agent development</li> 
 <li>Scrapper development :-)</li> 
 </ul>
+
+## Environment variables (secrets)
+
+Some examples (Wit.ai + Facebook Messenger bot) require API tokens. Do **not** hardcode them in source files.
+
+- Copy `.env.example` → `.env` and fill values, or export env vars in your shell:
+  - `WIT_ACCESS_TOKEN`
+  - `FB_PAGE_ACCESS_TOKEN`
+  - `FB_VERIFY_TOKEN`

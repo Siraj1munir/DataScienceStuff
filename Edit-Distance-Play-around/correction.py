@@ -1,6 +1,7 @@
 import sys
 from operator import itemgetter
 import re
+import os
 
 def tokenizer(sentence):
 	"""
@@ -284,6 +285,46 @@ def findPlausibleWords(word, valid_words):
 
 	return sorted_list
 
+def _prompt_correction(word, plausible, line, line_number):
+	"""
+	Helper used by spellChecker() to interactively choose a correction
+	for a misspelled word.
+	"""
+	print('Attention!')
+	print('\'' + word + '\' might be spelled', 'incorrectly.')
+	print('Line Number: ' + str(line_number))
+	print('Line: \'' + line + '\'')
+	print('Did you mean:')
+	for i in range(len(plausible)):
+		print('Index: %s, Word: %s, Min dist: %f' %
+			  (i, plausible[i][0], plausible[i][1]))
+	print('Index: ' + str(len(plausible)) + ',', 'Ignore misspelling')
+	print('Please enter below the index of the', 'correct word:')
+
+	user_input = None
+	new = word
+	while user_input is None:
+		user_input = input()
+		if user_input.isdigit():
+			user_int = int(user_input)
+			if user_int == len(plausible):
+				new = word
+			elif 0 <= user_int < len(plausible):
+				new = plausible[user_int][0]
+			else:
+				user_input = None
+				print('Invalid index entered.', 'Please try again.')
+		else:
+			user_input = None
+			print('Invalid index entered.', 'Please try again.')
+
+	print()
+	print('Resuming. Please be patient.')
+	print()
+
+	return new
+
+
 def spellChecker(f):
 	"""
 	spellChecker() takes a file and checks whether the words in the file are
@@ -322,51 +363,7 @@ def spellChecker(f):
 					   (word.lower() not in words[len(word)])):
 						plausible = findPlausibleWords(word, words)
 						if len(plausible) > 0:
-							print('Attention!')
-							print('\'' + word + '\' might be spelled',
-							      'incorrectly.')
-							print('Line Number: ' + str(count))
-							print('Line: \'' + line + '\'')
-							print('Did you mean:')
-							for i in range(len(plausible)):
-								print('Index: %s, Word: %s, Min dist: %f' % 
-									(i, plausible[i][0], plausible[i][1]))
-							print('Index: ' + str(len(plausible)) + ',',
-								  'Ignore misspelling')
-							print('Please enter below the index of the',
-								  'correct word:')
-
-							# Wait for the user to decide which of the words 
-							# they want the word to be corrected to. Replace
-							# the existing word with the correct one in the
-							# new corrected_* file.
-							user_input = None
-							while user_input == None:
-								user_input = input()
-								if user_input.isdigit():
-									user_int = int(user_input)
-									if user_int == len(plausible):
-										new = word
-									elif ((user_int < len(plausible)) and 
-										  (user_int >= 0)):
-										new = plausible[user_int][0]
-									else:
-										# user did not enter an int in the 
-										# range 0-5.
-										user_input = None
-										print('Invalid index entered.',
-											  'Please try again.')
-								else:
-									# user did not enter an int in the range
-									# 0-5.
-									user_input = None
-									print('Invalid index entered.',
-										  'Please try again.')
-							# Prints empty lines around the resuming message,
-							# as this highlights it more.
-							print()
-							print('Resuming. Please be patient.')
-							print()
+							new = _prompt_correction(word, plausible, line, count)
 				
 				# Check if the word was the first word in the line and add
 				# spaces accordingly.
@@ -378,7 +375,7 @@ def spellChecker(f):
 			# Makes sure we start a new line at the correct places.
 			f_new = f_new + '\n'
 		f.close()
-	except:
+	except Exception:
 		print("Error: Could be an invalid filename.")
 		sys.exit()
 
@@ -386,7 +383,8 @@ def spellChecker(f):
 
 	# Create a new file and write the corrected version of the text to that
 	# file.
-	fixed_file = open('corrected_' + f.name, 'w')
+	safe_in_name = os.path.basename(f.name)
+	fixed_file = open('corrected_' + safe_in_name, 'w')
 	fixed_file.write(f_new)
 	fixed_file.close()
 
