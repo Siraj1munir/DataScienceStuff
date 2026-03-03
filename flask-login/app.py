@@ -1,4 +1,5 @@
 # import the Flask class from the flask module
+import os
 from flask import Flask, render_template, redirect, url_for, request
 
 # create the application object
@@ -27,4 +28,4 @@ def login():
 
 # start the server with the 'run()' method
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=os.getenv("FLASK_DEBUG") == "1")

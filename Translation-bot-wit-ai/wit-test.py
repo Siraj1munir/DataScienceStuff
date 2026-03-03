@@ -6,8 +6,14 @@ from googletrans import Translator
 
 app = Flask(__name__)
 
-PAGE_ACCESS_TOKEN = "EAAKWxAuARyABAF9eLDIITaLUTg85uZBEEBCG0de1xiQnGvsWMhOv153nSaJfwPVe3ZBvbyp9mxzdxH8gfP9dtcopmJ3lfJueLYeiGlab8ZCMcXTZBiPRWaBDiNsMlroawBafpE3xjnUZB32nzZBkNdXrXUuYVPSZBhT9vKVPoOFhgZDZD"
-VERIFY_TOKEN = 'TestingTheTokenByUmerQaisar'
+def _require_env(name: str) -> str:
+    value = os.getenv(name)
+    if not value:
+        raise RuntimeError(f"Missing required env var: {name}")
+    return value
+
+PAGE_ACCESS_TOKEN = _require_env("FB_PAGE_ACCESS_TOKEN")
+VERIFY_TOKEN = _require_env("FB_VERIFY_TOKEN")
 bot = Bot(PAGE_ACCESS_TOKEN)
 translator = Translator()
 
@@ -77,4 +83,4 @@ def log(message):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=os.getenv("FLASK_DEBUG") == "1")
